@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.core.urlresolvers import reverse
 # Create your models here.
 class EntryQuerySet(models.QuerySet):
 	def published(self):
@@ -13,6 +13,8 @@ class Entry(models.Model):
 	modified = models.DateTimeField(auto_now=True)
 
 	objects = EntryQuerySet.as_manager()
+	def get_absolute_url(self):
+		return reverse("entry_detail", kwargs = {"slug":self.slug})
 	def __str__(self):
 		return self.title
 

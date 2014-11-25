@@ -7,7 +7,7 @@
 <body>
 {% for object in object_list %}
 	<div class = "post">
-		<h2>{{ object.title }} </h2>
+		<h2><a href="{% url "entry_detail" object.slug %}">{{ object.title }}</a></h2>
 		<p class = "meta"> {{ object.created }} </p>
 		{{ object.body|markdown }}
 	</div>
