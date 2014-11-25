@@ -1,0 +1,16 @@
+{% load django_markdown %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>myBlog</title>
+</head>
+<body>
+{% for object in object_list %}
+	<div class = "post">
+		<h2>{{ object.title }} </h2>
+		<p class = "meta"> {{ object.created }} </p>
+		{{ object.body|markdown }}
+	</div>
+{% endfor %}
+</body>
+</html>
