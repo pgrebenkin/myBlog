@@ -10,3 +10,5 @@ class BlogIndex(generic.ListView):
 class BlogDetail(generic.DetailView):
 	model = models.Entry
 	template_name = "post.html"
+	def rank(self, request, id):
+		pass
