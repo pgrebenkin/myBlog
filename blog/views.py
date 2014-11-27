@@ -4,11 +4,10 @@ from blog import models
 # Create your views here.
 
 class BlogIndex(generic.ListView):
-	queryset = models.Entry.objects.published()
+	queryset = models.Post.objects.published()
 	template_name = "home.html"
 	paginate_by = 10
 class BlogDetail(generic.DetailView):
-	model = models.Entry
+	model = models.Post
 	template_name = "post.html"
-	def rank(self, request, id):
-		pass
+	

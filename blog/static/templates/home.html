@@ -7,15 +7,14 @@
 <body>
 {% for object in object_list %}
 	<div class = "post">
-		<h2><a href="{% url "entry_detail" object.slug %}">{{ object.title }}</a></h2>
+		<h2><a href="{% url "post_detail" object.slug %}">{{ object.title }}</a></h2>
 		<p class = "meta"> Опубликован:{{ object.created }} </p>
-		<p> Тэги: 
-			{% for tag in object.tag.all %}
-				<b>{{tag}}</b>
+		<p> Метки: 
+			{% for label in object.label.all %}
+				<b>{{label}}</b>
 				{% if not forloop.last %}, {% endif %}
 			{% endfor %}</p>
-		<p> Рейтинг: {{object.rank}} </p>
-		{{ object.abstract|markdown }}
+		<p>{{ object.abstract|markdown }}</p>
 	</div>
 {% endfor %}
 </body>
