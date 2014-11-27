@@ -1,0 +1,5 @@
+blog/migrations/__pycache__/*.pyc
+blog/__pycache__/*.pyc
+myBlog/__pychache__/*.pyc
+
+
