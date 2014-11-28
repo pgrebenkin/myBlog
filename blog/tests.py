@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.test import TestCase, LiveServerTestCase, Client
 from django.utils import timezone
 from blog.models import Post, Label
 # Create your tests here.
@@ -46,4 +46,24 @@ class LabelTest(TestCase):
 		self.assertEquals(len(all_labels),1)
 		only_label = all_labels[0]
 		self.assertEquals(only_label.name, 'python')
-
+class AdminTest(LiveServerTestCase):
+	fixtures = ['users.json']
+	def setUp(self):
+		self.client = Client()
+	def test_login(self):
+		response = self.client.get('/admin/', follow=True)
+		self.assertEquals(response.status_code, 200)
+		self.assertTrue(str.encode('Log in') in response.content)
+		self.client.login(username = 'test', password = 'test')
+		response = self.client.get('/admin/')
+		self.assertEquals(response.status_code, 200)
+		self.assertTrue(str.encode('Log out') in response.content)
+	def test_logout(self):
+		self.client.login(username = 'test', password = 'test')
+		response = self.client.get('/admin/')
+		self.assertEquals(response.status_code, 200)
+		self.assertTrue(str.encode('Log out') in response.content)
+		self.client.logout()
+		response = self.client.get('/admin/', follow=True)
+		self.assertEquals(response.status_code, 200)
+		self.assertTrue(str.encode('Log in') in response.content)
