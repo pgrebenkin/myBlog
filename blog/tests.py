@@ -156,5 +156,69 @@ class AdminTest(LiveServerTestCase):
 		self.assertTrue(str.encode('deleted successfully') in response.content)
 		all_posts = Post.objects.all()
 		self.assertEquals(len(all_posts),0)
+	def test_create_label(self):
+		self.client.login(username = 'test', password = 'test')
+		response = self.client.get('/admin/blog/label/add/')
+		self.assertEquals(response.status_code,200)
+		response = self.client.post('/admin/blog/label/add/', {
+			'name':'test label'
+			}, follow = True)
+		self.assertEquals(response.status_code,200)
+		self.assertTrue(str.encode('added successfully') in response.content)
+		all_labels = Label.objects.all()
+		self.assertEquals(len(all_labels),1)
+	def test_edit_label(self):
+		label = Label()
+		label.name = 'test'
+		label.save()
+		self.client.login(username = 'test', password = 'test')
+		response = self.client.post('/admin/blog/label/'+str(label.pk)+'/',{
+			'name':'second test label'
+		}, follow=True)
+		self.assertEquals(response.status_code,200)
+		self.assertTrue(str.encode('changed successfully') in response.content)
+		all_labels = Label.objects.all()
+		self.assertEquals(len(all_labels),1)
+		only_label = all_labels[0]
+		self.assertEquals(only_label.name, 'second test label')
+	def test_delete_label(self):
+		label = Label()
+		label.name = 'test'
+		label.save()
+		self.client.login(username = 'test', password = 'test')
+		response = self.client.post('/admin/blog/label/'+str(label.pk)+'/delete/', {
+			'post':'yes'
+		}, follow = True)
+		self.assertEquals(response.status_code, 200)
+		self.assertTrue(str.encode('deleted successfully') in response.content)
+		all_labels = Label.objects.all()
+		self.assertEquals(len(all_labels), 0)
 		
+
+	'''def test_create_post(self):
+		label = Label()
+		label.name = 'winter'
+		label.save()
+		self.client.login(username = 'test', password = 'test')
+		response = self.client.get('/admin/blog/post/add/')
+		self.assertEquals(response.status_code, 200)
+		response = self.client.post('/admin/blog/post/add/', {
+			'title':'My test Post',
+			'abstract':'Test Abstract',
+			'body':'Test Post Body',
+			'created':'2014-12-01',
+			'modified':'2014-12-01',
+			'slug':'my-test-post',
+			'label':str(label.pk),
+			'numofseen':str(0)
+			},
+			follow = True
+			)
+		self.assertEquals(response.status_code,200)
+		self.assertTrue(str.encode('added successfully') in response.content)
+		all_posts = Post.objects.all()
+		self.assertEquals(len(all_posts),1)'''
+
+
+
 
