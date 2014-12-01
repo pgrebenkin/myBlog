@@ -193,32 +193,36 @@ class AdminTest(LiveServerTestCase):
 		self.assertTrue(str.encode('deleted successfully') in response.content)
 		all_labels = Label.objects.all()
 		self.assertEquals(len(all_labels), 0)
-		
-
-	'''def test_create_post(self):
+class PostViewTest(LiveServerTestCase):
+	def SetUp(self):
+		self.client = Client()
+	def test_index(self):
 		label = Label()
-		label.name = 'winter'
+		label.name = 'python'
 		label.save()
-		self.client.login(username = 'test', password = 'test')
-		response = self.client.get('/admin/blog/post/add/')
-		self.assertEquals(response.status_code, 200)
-		response = self.client.post('/admin/blog/post/add/', {
-			'title':'My test Post',
-			'abstract':'Test Abstract',
-			'body':'Test Post Body',
-			'created':'2014-12-01',
-			'modified':'2014-12-01',
-			'slug':'my-test-post',
-			'label':str(label.pk),
-			'numofseen':str(0)
-			},
-			follow = True
-			)
-		self.assertEquals(response.status_code,200)
-		self.assertTrue(str.encode('added successfully') in response.content)
+		post = Post()
+		post.title = 'Test post'
+		post.save()
+		post.abstract = 'Test Abstract'
+		post.body = 'Post Body'
+		post.slug = 'test-post'
+		post.label = str(label.pk)
+		post.publish = True
+		post.created = timezone.now()
+		post.modified = timezone.now()
+		post.numofseen = 0
+		post.publish = True
+		post.save()
 		all_posts = Post.objects.all()
-		self.assertEquals(len(all_posts),1)'''
-
-
-
-
+		self.assertEquals(len(all_posts),1)
+		year = str(post.created.year)
+		month = post.created.strftime('%b')
+		day = str(post.created.day)
+		response = self.client.get('/')
+		self.assertEquals(response.status_code,200)
+		self.assertTrue(str.encode(post.title) in response.content)
+		self.assertTrue(str.encode(post.abstract) in response.content)
+		self.assertTrue(str.encode(post.label.get().name) in response.content)
+		self.assertTrue(str.encode(year) in response.content)
+		self.assertTrue(str.encode(month) in response.content)
+		self.assertTrue(str.encode(day) in response.content)

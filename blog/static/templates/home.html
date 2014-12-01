@@ -11,8 +11,7 @@
 		<p class = "meta"> Опубликован:{{ object.created }} </p>
 		<p> Метки: 
 			{% for label in object.label.all %}
-				<b>{{label}}</b>
-				{% if not forloop.last %}, {% endif %}
+				<b>{{label}}</b>{% if not forloop.last %},{% endif %}
 			{% endfor %}</p>
 		<p>{{ object.abstract|markdown }}</p>
 	</div>

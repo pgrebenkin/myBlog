@@ -3,11 +3,11 @@ from django.views import generic
 from blog import models
 # Create your views here.
 
-class BlogIndex(generic.ListView):
+class PostIndex(generic.ListView):
 	queryset = models.Post.objects.published()
 	template_name = "home.html"
 	paginate_by = 10
-class BlogDetail(generic.DetailView):
+class PostDetail(generic.DetailView):
 	model = models.Post
 	template_name = "post.html"
 	
