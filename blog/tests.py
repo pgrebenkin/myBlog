@@ -226,3 +226,26 @@ class PostViewTest(LiveServerTestCase):
 		self.assertTrue(str.encode(year) in response.content)
 		self.assertTrue(str.encode(month) in response.content)
 		self.assertTrue(str.encode(day) in response.content)
+	def test_detail(self):
+		label = Label()
+		label.name = 'python'
+		label.save()
+		post = Post()
+		post.title = 'Test post'
+		post.save()
+		post.abstract = 'Test Abstract'
+		post.body = 'Post Body'
+		post.slug = 'test-post'
+		post.label = str(label.pk)
+		post.publish = True
+		post.created = timezone.now()
+		post.modified = timezone.now()
+		post.numofseen = 0
+		post.publish = True
+		post.save()
+		all_posts = Post.objects.all()
+		self.assertEquals(len(all_posts),1)
+		response=self.client.get('/'+str(post.slug))
+		self.assertEquals(response.status_code,200)
+		self.assertTrue(str.encode(post.body) in response.content)
+		
